@@ -4,6 +4,9 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -14,6 +17,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.jidesoft.swing.JideTabbedPane;
 import org.slf4j.Logger;
@@ -22,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import egps2.frame.gui.handler.EGPSTextTransferHandler;
 import egps2.UnifiedAccessPoint;
 import module.localblast.gui.AreadyInstalledBlastSoftwareBean;
+import module.localblast.gui.AreadyInstalledBlastSoftwareBean.BlastnConfig;
 import module.localblast.gui.SearchToolsPanel;
 import module.localblast.gui.util.JTextFieldHintListener;
 import module.localblast.gui.util.Util;
@@ -44,6 +51,7 @@ public class BasicBlastnPanel extends JPanel implements SearchProgrameCommon {
 	private SearchToolsPanel searchToolsPanel;
 	private JSpinner spinnerOfThreadsToUse;
 	private JTextField jTextFieldOfDB;
+	private BlastnConfig config;
 
 	/**
 	 * Create the panel.
@@ -52,6 +60,7 @@ public class BasicBlastnPanel extends JPanel implements SearchProgrameCommon {
 	 */
 	public BasicBlastnPanel(SearchToolsPanel searchToolsPanel) {
 		this.searchToolsPanel = searchToolsPanel;
+		this.config = searchToolsPanel.getLocalBlastMain().getAreadyInstalledBlastSoftwareBean().getBlastnConfig();
 
 		Font defaultFont = UnifiedAccessPoint.getLaunchProperty().getDefaultFont();
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -326,6 +335,89 @@ public class BasicBlastnPanel extends JPanel implements SearchProgrameCommon {
 		gbc_lblNewLabel_12.gridy = 12;
 		add(lblNewLabel_12, gbc_lblNewLabel_12);
 
+		// 从配置加载初始值
+		loadFromConfig();
+
+		// 添加监听器，实时更新配置
+		setupListeners();
+	}
+
+	/**
+	 * 从配置加载初始值
+	 */
+	private void loadFromConfig() {
+		if (config.getQuery() != null && !config.getQuery().isEmpty()) {
+			textField_query.setText(config.getQuery());
+		}
+		if (config.getQueryLoc() != null && !config.getQueryLoc().isEmpty()) {
+			textField_queryloc.setText(config.getQueryLoc());
+		}
+		if (config.getStrand() != null && !config.getStrand().isEmpty()) {
+			comboBox_strand.setSelectedItem(config.getStrand());
+		}
+		if (config.getTask() != null && !config.getTask().isEmpty()) {
+			comboBox_task.setSelectedItem(config.getTask());
+		}
+		if (config.getOut() != null && !config.getOut().isEmpty()) {
+			textField_out.setText(config.getOut());
+		}
+		if (config.getOutfmt() != null && !config.getOutfmt().isEmpty()) {
+			textField_outfmt.setText(config.getOutfmt());
+		}
+		spinnerOfThreadsToUse.setValue(config.getNumThreads());
+		if (config.getEvalue() != null && !config.getEvalue().isEmpty()) {
+			textField_evalue.setText(config.getEvalue());
+		}
+		if (config.getWordSize() != null && !config.getWordSize().isEmpty()) {
+			textField_word_size.setText(config.getWordSize());
+		}
+		if (config.getGapopen() != null && !config.getGapopen().isEmpty()) {
+			textField_gapopen.setText(config.getGapopen());
+		}
+		if (config.getGapextend() != null && !config.getGapextend().isEmpty()) {
+			textField_gapextend.setText(config.getGapextend());
+		}
+	}
+
+	/**
+	 * 设置监听器，实时更新配置
+	 */
+	private void setupListeners() {
+		// 文本框监听
+		textField_query.getDocument().addDocumentListener(createDocListener(() -> config.setQuery(textField_query.getText())));
+		textField_queryloc.getDocument().addDocumentListener(createDocListener(() -> config.setQueryLoc(textField_queryloc.getText())));
+		textField_out.getDocument().addDocumentListener(createDocListener(() -> config.setOut(textField_out.getText())));
+		textField_outfmt.getDocument().addDocumentListener(createDocListener(() -> config.setOutfmt(textField_outfmt.getText())));
+		textField_evalue.getDocument().addDocumentListener(createDocListener(() -> config.setEvalue(textField_evalue.getText())));
+		textField_word_size.getDocument().addDocumentListener(createDocListener(() -> config.setWordSize(textField_word_size.getText())));
+		textField_gapopen.getDocument().addDocumentListener(createDocListener(() -> config.setGapopen(textField_gapopen.getText())));
+		textField_gapextend.getDocument().addDocumentListener(createDocListener(() -> config.setGapextend(textField_gapextend.getText())));
+
+		// 下拉框监听
+		comboBox_strand.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				config.setStrand(e.getItem().toString());
+			}
+		});
+		comboBox_task.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				config.setTask(e.getItem().toString());
+			}
+		});
+
+		// Spinner 监听
+		spinnerOfThreadsToUse.addChangeListener((ChangeEvent e) -> config.setNumThreads((Integer) spinnerOfThreadsToUse.getValue()));
+	}
+
+	private DocumentListener createDocListener(Runnable action) {
+		return new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) { action.run(); }
+			@Override
+			public void removeUpdate(DocumentEvent e) { action.run(); }
+			@Override
+			public void changedUpdate(DocumentEvent e) { action.run(); }
+		};
 	}
 
 	@Override
@@ -334,50 +426,60 @@ public class BasicBlastnPanel extends JPanel implements SearchProgrameCommon {
 		AreadyInstalledBlastSoftwareBean areadyInstalledBlastSoftwareBean = searchToolsPanel.getLocalBlastMain()
 				.getAreadyInstalledBlastSoftwareBean();
 
-		StringBuilder sBuilder = new StringBuilder();
+		List<String> commandTokens = new ArrayList<>();
 
 		String windowsBlastN = areadyInstalledBlastSoftwareBean.getWindowsBlastN();
-		sBuilder.append(windowsBlastN);
-		sBuilder.append(" -query ").append(textField_query.getText());
+		commandTokens.add(windowsBlastN);
+		commandTokens.add("-query");
+		commandTokens.add(textField_query.getText());
 
 		if (textField_queryloc.getText().length() > 0) {
-			sBuilder.append(" -query_loc ").append(textField_queryloc.getText());
+			commandTokens.add("-query_loc");
+			commandTokens.add(textField_queryloc.getText());
 		}
-		sBuilder.append(" -strand ").append(comboBox_strand.getSelectedItem().toString());
-		sBuilder.append(" -task ").append(comboBox_task.getSelectedItem().toString());
+		commandTokens.add("-strand");
+		commandTokens.add(comboBox_strand.getSelectedItem().toString());
+		commandTokens.add("-task");
+		commandTokens.add(comboBox_task.getSelectedItem().toString());
 
-		sBuilder.append(" -db ").append(jTextFieldOfDB.getText());
+		commandTokens.add("-db");
+		commandTokens.add(jTextFieldOfDB.getText());
 
-		sBuilder.append(" -out ").append(textField_out.getText());
-		sBuilder.append(" -outfmt ").append(textField_outfmt.getText());
-		sBuilder.append(" -num_threads ").append(spinnerOfThreadsToUse.getValue().toString());
+		commandTokens.add("-out");
+		commandTokens.add(textField_out.getText());
+		commandTokens.add("-outfmt");
+		commandTokens.add(textField_outfmt.getText());
+		commandTokens.add("-num_threads");
+		commandTokens.add(spinnerOfThreadsToUse.getValue().toString());
 
 		if (textField_evalue.getText().length() > 0) {
-			sBuilder.append(" -evalue ").append(textField_evalue.getText());
+			commandTokens.add("-evalue");
+			commandTokens.add(textField_evalue.getText());
 		}
 		if (textField_word_size.getText().length() > 0) {
-			sBuilder.append(" -word_size ").append(textField_word_size.getText());
+			commandTokens.add("-word_size");
+			commandTokens.add(textField_word_size.getText());
 		}
 		if (textField_gapopen.getText().length() > 0) {
-			sBuilder.append(" -gapopen ").append(textField_gapopen.getText());
+			commandTokens.add("-gapopen");
+			commandTokens.add(textField_gapopen.getText());
 		}
 		if (textField_gapextend.getText().length() > 0) {
-			sBuilder.append(" -gapextend ").append(textField_gapextend.getText());
+			commandTokens.add("-gapextend");
+			commandTokens.add(textField_gapextend.getText());
 		}
 
 		// 千万不要，这里不是remote
-//		sBuilder.append(" -remote");
+//		commandTokens.add("-remote");
 
-		final String runProgrameCommand = sBuilder.toString();
 		normal.setText("");
 		error.setText("");
-		normal.append(runProgrameCommand);
+		normal.append(String.join(" ", commandTokens));
 
 		try {
 
 			long timeMillis = System.currentTimeMillis();
-			// final Process process = Runtime.getRuntime().exec(runProgrameCommand);
-			final Process process = new ProcessBuilder(Util.splitCommandTokens(runProgrameCommand)).start();
+			final Process process = new ProcessBuilder(commandTokens).start();
 			Util.printMessage(process.getInputStream(), false, normal, error);
 			Util.printMessage(process.getErrorStream(), true, normal, error);
 			// value 0 is normal

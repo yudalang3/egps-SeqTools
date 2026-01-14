@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -31,18 +28,6 @@ public class Util {
 				textArea.append("\n");
 			});
 		}
-	}
-
-	public static List<String> splitCommandTokens(String command) {
-		List<String> tokens = new ArrayList<>();
-		if (command == null) {
-			return tokens;
-		}
-		StringTokenizer stringTokenizer = new StringTokenizer(command);
-		while (stringTokenizer.hasMoreTokens()) {
-			tokens.add(stringTokenizer.nextToken());
-		}
-		return tokens;
 	}
 
 	public static void printMessage(final InputStream input, boolean isError, JTextArea textArea_normal,

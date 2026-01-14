@@ -5,6 +5,7 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 public class SequenceFilteringPanel extends JPanel {
 	private static final Logger log = LoggerFactory.getLogger(SequenceFilteringPanel.class);
 
+	private LocalBlastMain localBlastMain;
 	private BasicModeParameter allParameters;
 	private JTextArea textArea_normal;
 	private JTextArea textArea_error;
@@ -29,7 +31,8 @@ public class SequenceFilteringPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public SequenceFilteringPanel() {
+	public SequenceFilteringPanel(LocalBlastMain localBlastMain) {
+		this.localBlastMain = localBlastMain;
 
 		this.setLayout(new BorderLayout(0, 0));
 
@@ -66,31 +69,29 @@ public class SequenceFilteringPanel extends JPanel {
 			new Thread(() -> {
 
 				allParameters = parametersPanel.getAllParameters();
-				String runProgrameCommand = allParameters.getRunProgrameCommand();
-				
+				String blastdbcmd = localBlastMain.getAreadyInstalledBlastSoftwareBean().getBlastdbcmd();
+				List<String> commandTokens = allParameters.getCommandTokens(blastdbcmd);
+
 				textArea_normal.setText("");
 				textArea_error.setText("");
-				textArea_normal.append(runProgrameCommand);
+				textArea_normal.append(String.join(" ", commandTokens));
 				/**
 				 * https://www.biostars.org/p/413294/
 				 * 可能会出现问题说：
 				 * No volumes were created.BLAST Database creation error: mdb_env_open: 磁盘空间不足。
-				 * 
+				 *
 				 * 解决方法：可以放到高级参数中！
 				 * String[] envp = {"BLASTDB_LMDB_MAP_SIZE","100000000"};
 				 */
 				try {
-					//final Process process = Runtime.getRuntime().exec("cmd.exe /c dir");
-					
-					// final Process process = Runtime.getRuntime().exec(runProgrameCommand);
-					final Process process = new ProcessBuilder(Util.splitCommandTokens(runProgrameCommand)).start();
+					final Process process = new ProcessBuilder(commandTokens).start();
 					Util.printMessage(process.getInputStream(),false,textArea_normal,textArea_error);
 					Util.printMessage(process.getErrorStream(),true,textArea_normal,textArea_error);
 				    // value 0 is normal
 					int value = process.waitFor();
 				    //System.out.println(value);
 					} catch (Exception e2) {
-						log.error("Failed to execute command: {}", runProgrameCommand, e2);
+						log.error("Failed to execute blastdbcmd.", e2);
 					}
 
 			}).start();

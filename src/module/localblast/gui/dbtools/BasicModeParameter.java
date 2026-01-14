@@ -1,5 +1,8 @@
 package module.localblast.gui.dbtools;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BasicModeParameter {
 
 	final String[] parameterNames = {
@@ -65,28 +68,33 @@ public class BasicModeParameter {
 		return parameterNames;
 	}
 	
-	public String getRunProgrameCommand(String exePath) {
-		StringBuilder sBuilder = new StringBuilder();
-		sBuilder.append(exePath);
-		sBuilder.append(" -in ").append(inParameterString);
-		sBuilder.append(" -dbtype ").append(dbtypeParameterString);
-		sBuilder.append(" -input_type ").append(input_typeParameterString);
-		
+	public List<String> getCommandTokens(String exePath) {
+		List<String> tokens = new ArrayList<>();
+		tokens.add(exePath);
+		tokens.add("-in");
+		tokens.add(inParameterString);
+		tokens.add("-dbtype");
+		tokens.add(dbtypeParameterString);
+		tokens.add("-input_type");
+		tokens.add(input_typeParameterString);
+
 		if (titleParameterString.length() > 0) {
-			sBuilder.append(" -title ").append(titleParameterString);
+			tokens.add("-title");
+			tokens.add(titleParameterString);
 		}
-		
+
 		if (ifParse_seqids) {
-			sBuilder.append(" -parse_seqids");
+			tokens.add("-parse_seqids");
 		}
-		
+
 		if (ifHash_index) {
-			sBuilder.append(" -hash_index");
+			tokens.add("-hash_index");
 		}
-		
-		sBuilder.append(" -out ").append(outParameterString);
-		
-		return sBuilder.toString();
+
+		tokens.add("-out");
+		tokens.add(outParameterString);
+
+		return tokens;
 	}
 	
 	public String getOutParameterString() {

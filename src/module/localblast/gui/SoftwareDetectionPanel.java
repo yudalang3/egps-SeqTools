@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -141,21 +143,23 @@ public class SoftwareDetectionPanel extends JPanel implements ActionListener {
 		}
 		textArea_normal.setText("");
 
-		String temp = null;
+		List<String> commandTokens;
 		Object source = e.getSource();
 		if (detectByMakeDB == source) {
-			temp = areadyInstalledBlastSoftwareBean.getWindowsMakeBlastDB().concat(" -h");
+			commandTokens = Arrays.asList(areadyInstalledBlastSoftwareBean.getWindowsMakeBlastDB(), "-h");
 		} else if (detectByBlastn == source) {
-			temp = areadyInstalledBlastSoftwareBean.getWindowsBlastN().concat(" -h");
+			commandTokens = Arrays.asList(areadyInstalledBlastSoftwareBean.getWindowsBlastN(), "-h");
+		} else {
+			return;
 		}
 
-		final String runProgrameCommand = temp;
+		final List<String> finalCommandTokens = commandTokens;
+		textArea_normal.append(String.join(" ", finalCommandTokens));
 
 		new Thread(() -> {
 
 			try {
-				// final Process process = Runtime.getRuntime().exec(runProgrameCommand);
-				final Process process = new ProcessBuilder(Util.splitCommandTokens(runProgrameCommand)).start();
+				final Process process = new ProcessBuilder(finalCommandTokens).start();
 				Util.printMessage(process.getInputStream(), textArea_normal);
 				Util.printMessage(process.getErrorStream(), textArea_normal);
 				// value 0 is normal

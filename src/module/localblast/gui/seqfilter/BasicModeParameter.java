@@ -1,5 +1,8 @@
 package module.localblast.gui.seqfilter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BasicModeParameter {
 	
 	String dbParameterString;
@@ -44,27 +47,35 @@ public class BasicModeParameter {
 		this.outfmtParameterString = outfmtParameterString;
 	}
 
-	public String getRunProgrameCommand() {
-		StringBuilder sBuilder = new StringBuilder();
-		sBuilder.append("input/file/path/config/software/blast/blastdbcmd.exe");
-		sBuilder.append(" -db ").append(dbParameterString);
-		sBuilder.append(" -dbtype ").append(dbtypeParameterString);
-		if (entryParameterString.length()> 0) {
-			sBuilder.append(" -entry ").append(entryParameterString);
+	public List<String> getCommandTokens(String exePath) {
+		List<String> tokens = new ArrayList<>();
+		tokens.add(exePath);
+		tokens.add("-db");
+		tokens.add(dbParameterString);
+		tokens.add("-dbtype");
+		tokens.add(dbtypeParameterString);
+		if (entryParameterString.length() > 0) {
+			tokens.add("-entry");
+			tokens.add(entryParameterString);
 		}
 		if (rangeParameterString.length() > 0) {
-			sBuilder.append(" -range ").append(rangeParameterString);
+			tokens.add("-range");
+			tokens.add(rangeParameterString);
 		}
-		if (strandParameterString.length()>0) {
-			sBuilder.append(" -strand ").append(strandParameterString);
+		if (strandParameterString.length() > 0) {
+			tokens.add("-strand");
+			tokens.add(strandParameterString);
 		}
 		if (entry_batchParameterString.length() > 0) {
-			sBuilder.append(" -entry_batch ").append(entry_batchParameterString);
+			tokens.add("-entry_batch");
+			tokens.add(entry_batchParameterString);
 		}
-		sBuilder.append(" -out ").append(outParameterString);
-		sBuilder.append(" -outfmt ").append(outfmtParameterString);
-		
-		return sBuilder.toString();
+		tokens.add("-out");
+		tokens.add(outParameterString);
+		tokens.add("-outfmt");
+		tokens.add(outfmtParameterString);
+
+		return tokens;
 	}
 	
 	public String getOutParameterString() {

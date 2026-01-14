@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import javax.swing.SwingUtilities;
 
@@ -16,7 +17,6 @@ import javax.swing.JPanel;
 import egps2.panels.dialog.SwingDialog;
 import module.localblast.gui.AbstractBasicPanel;
 import module.localblast.gui.LocalBlastMain;
-import module.localblast.gui.util.Util;
 import egps2.modulei.RunningTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,8 @@ public class DataBaseToolsPanel extends AbstractBasicPanel {
 
 	@Override
 	protected JPanel getUpParametersPanel() {
-		parametersPanel = new BasicModePanel();
+		parametersPanel = new BasicModePanel(
+				localBlastMain.getAreadyInstalledBlastSoftwareBean().getDbToolsConfig());
 		return parametersPanel;
 	}
 
@@ -65,22 +66,21 @@ public class DataBaseToolsPanel extends AbstractBasicPanel {
 		allParameters = parametersPanel.getAllParameters();
 
 		String windowsMakeBlastDB = localBlastMain.getAreadyInstalledBlastSoftwareBean().getWindowsMakeBlastDB();
-		String runProgrameCommand = allParameters.getRunProgrameCommand(windowsMakeBlastDB);
+		List<String> commandTokens = allParameters.getCommandTokens(windowsMakeBlastDB);
 
 		textArea_normal.setText("");
 		textArea_error.setText("");
-		textArea_normal.append(runProgrameCommand);
+		textArea_normal.append(String.join(" ", commandTokens));
 		/**
 		 * https://www.biostars.org/p/413294/ 可能会出现问题说： No volumes were created.BLAST
 		 * Database creation error: mdb_env_open: 磁盘空间不足。
-		 * 
+		 *
 		 * 解决方法：可以放到高级参数中！ String[] envp = {"BLASTDB_LMDB_MAP_SIZE","100000000"};
 		 */
 		try {
 			// final Process process = Runtime.getRuntime().exec("cmd.exe /c dir");
 
-			// final Process process = Runtime.getRuntime().exec(runProgrameCommand);
-			final Process process = new ProcessBuilder(Util.splitCommandTokens(runProgrameCommand)).start();
+			final Process process = new ProcessBuilder(commandTokens).start();
 			printMessage(process.getInputStream(), false);
 			printMessage(process.getErrorStream(), true);
 			// value 0 is normal

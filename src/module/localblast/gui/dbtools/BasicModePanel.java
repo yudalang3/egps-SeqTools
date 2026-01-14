@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -13,9 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import egps2.frame.gui.handler.EGPSTextTransferHandler;
 import egps2.UnifiedAccessPoint;
+import module.localblast.gui.AreadyInstalledBlastSoftwareBean.DbToolsConfig;
 import module.localblast.gui.util.JTextFieldHintListener;
 
 @SuppressWarnings("serial")
@@ -27,11 +31,13 @@ public class BasicModePanel extends JPanel {
 	private JCheckBox chckbx_parse_seqids;
 	private JCheckBox chckbx_hash_index;
 	private JComboBox<String> comboBox_dbType;
+	private DbToolsConfig config;
 
 	/**
 	 * Create the panel.
 	 */
-	public BasicModePanel() {
+	public BasicModePanel(DbToolsConfig config) {
+		this.config = config;
 		Font defaultFont = UnifiedAccessPoint.getLaunchProperty().getDefaultFont();
 
 		setBorder(new EmptyBorder(0, 15, 0, 15));
@@ -170,6 +176,84 @@ public class BasicModePanel extends JPanel {
 		add(txtFouTextField, gbc_txtFyudalangworkblastdatancovexamdb);
 		txtFouTextField.setColumns(10);
 
+		// 从配置加载初始值
+		loadFromConfig();
+
+		// 添加监听器，实时更新配置
+		setupListeners();
+	}
+
+	/**
+	 * 从配置加载初始值
+	 */
+	private void loadFromConfig() {
+		if (config.getInPath() != null && !config.getInPath().isEmpty()) {
+			txtFinField.setText(config.getInPath());
+		}
+		if (config.getInputType() != null && !config.getInputType().isEmpty()) {
+			comboBox_inputType.setSelectedItem(config.getInputType());
+		}
+		if (config.getDbType() != null && !config.getDbType().isEmpty()) {
+			comboBox_dbType.setSelectedItem(config.getDbType());
+		}
+		if (config.getTitle() != null && !config.getTitle().isEmpty()) {
+			txtEnterTitleHere.setText(config.getTitle());
+		}
+		chckbx_parse_seqids.setSelected(config.isParseSeqids());
+		chckbx_hash_index.setSelected(config.isHashIndex());
+		if (config.getOutPath() != null && !config.getOutPath().isEmpty()) {
+			txtFouTextField.setText(config.getOutPath());
+		}
+	}
+
+	/**
+	 * 设置监听器，实时更新配置
+	 */
+	private void setupListeners() {
+		// 文本框监听
+		txtFinField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) { config.setInPath(txtFinField.getText()); }
+			@Override
+			public void removeUpdate(DocumentEvent e) { config.setInPath(txtFinField.getText()); }
+			@Override
+			public void changedUpdate(DocumentEvent e) { config.setInPath(txtFinField.getText()); }
+		});
+
+		txtEnterTitleHere.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) { config.setTitle(txtEnterTitleHere.getText()); }
+			@Override
+			public void removeUpdate(DocumentEvent e) { config.setTitle(txtEnterTitleHere.getText()); }
+			@Override
+			public void changedUpdate(DocumentEvent e) { config.setTitle(txtEnterTitleHere.getText()); }
+		});
+
+		txtFouTextField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) { config.setOutPath(txtFouTextField.getText()); }
+			@Override
+			public void removeUpdate(DocumentEvent e) { config.setOutPath(txtFouTextField.getText()); }
+			@Override
+			public void changedUpdate(DocumentEvent e) { config.setOutPath(txtFouTextField.getText()); }
+		});
+
+		// 下拉框监听
+		comboBox_inputType.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				config.setInputType(e.getItem().toString());
+			}
+		});
+
+		comboBox_dbType.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				config.setDbType(e.getItem().toString());
+			}
+		});
+
+		// 复选框监听
+		chckbx_parse_seqids.addItemListener(e -> config.setParseSeqids(chckbx_parse_seqids.isSelected()));
+		chckbx_hash_index.addItemListener(e -> config.setHashIndex(chckbx_hash_index.isSelected()));
 	}
 
 	public BasicModeParameter getAllParameters() {
