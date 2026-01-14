@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
+import javax.swing.SwingUtilities;
+
 import javax.swing.JPanel;
 
 import egps2.panels.dialog.SwingDialog;
@@ -112,23 +114,22 @@ public class DataBaseToolsPanel extends AbstractBasicPanel {
 
 	private void printMessage(final InputStream input, boolean isError) {
 		new Thread(() -> {
-			Reader reader = new InputStreamReader(input, StandardCharsets.UTF_8);
-			BufferedReader bf = new BufferedReader(reader);
-			String line = null;
-			try {
-					while ((line = bf.readLine()) != null) {
-						if (isError) {
-							textArea_error.append(line + "\n");
-							log.warn("BLAST stderr: {}", line);
-						} else {
-							textArea_normal.append(line + "\n");
-							// System.out.println(line);
-						}
+			try (Reader reader = new InputStreamReader(input, StandardCharsets.UTF_8);
+					BufferedReader bf = new BufferedReader(reader)) {
+				String line = null;
+				while ((line = bf.readLine()) != null) {
+					String lineCopy = line;
+					if (isError) {
+						SwingUtilities.invokeLater(() -> textArea_error.append(lineCopy + "\n"));
+						log.warn("BLAST stderr: {}", lineCopy);
+					} else {
+						SwingUtilities.invokeLater(() -> textArea_normal.append(lineCopy + "\n"));
 					}
-				} catch (IOException e) {
-					log.error("Failed to read process output.", e);
 				}
-			}).start();
+			} catch (Exception e) {
+				log.error("Failed to read process output.", e);
+			}
+		}).start();
 		}
 
 	}

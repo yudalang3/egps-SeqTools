@@ -10,12 +10,28 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Util {
 	private static final Logger log = LoggerFactory.getLogger(Util.class);
+
+	public static void appendLineOnEdt(JTextArea textArea, String line) {
+		if (textArea == null) {
+			return;
+		}
+		if (SwingUtilities.isEventDispatchThread()) {
+			textArea.append(line);
+			textArea.append("\n");
+		} else {
+			SwingUtilities.invokeLater(() -> {
+				textArea.append(line);
+				textArea.append("\n");
+			});
+		}
+	}
 
 	public static List<String> splitCommandTokens(String command) {
 		List<String> tokens = new ArrayList<>();
@@ -32,39 +48,30 @@ public class Util {
 	public static void printMessage(final InputStream input, boolean isError, JTextArea textArea_normal,
 			JTextArea textArea_error) {
 		new Thread(() -> {
-			Reader reader = new InputStreamReader(input);
-			BufferedReader bf = new BufferedReader(reader);
-			String line = null;
-			try {
+			try (Reader reader = new InputStreamReader(input); BufferedReader bf = new BufferedReader(reader)) {
+				String line = null;
 				while ((line = bf.readLine()) != null) {
 					if (isError) {
-						textArea_error.append(line + "\n");
-						// System.err.println(line);
+						appendLineOnEdt(textArea_error, line);
 					} else {
-						textArea_normal.append(line + "\n");
-						// System.out.println(line);
+						appendLineOnEdt(textArea_normal, line);
 					}
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.error("Failed to read process output.", e);
 			}
 		}).start();
 	}
 
 	public static void printMessage(final InputStream input, JTextArea textArea_normal) {
-//		new Thread(() -> {
-			Reader reader = new InputStreamReader(input);
-			BufferedReader bf = new BufferedReader(reader);
+		try (Reader reader = new InputStreamReader(input); BufferedReader bf = new BufferedReader(reader)) {
 			String line = null;
-			try {
-				while ((line = bf.readLine()) != null) {
-					textArea_normal.append(line);
-					textArea_normal.append("\n");
-				}
-			} catch (IOException e) {
-				log.error("Failed to read process output.", e);
+			while ((line = bf.readLine()) != null) {
+				appendLineOnEdt(textArea_normal, line);
 			}
-//		}).start();
+		} catch (Exception e) {
+			log.error("Failed to read process output.", e);
+		}
 	}
 
 }

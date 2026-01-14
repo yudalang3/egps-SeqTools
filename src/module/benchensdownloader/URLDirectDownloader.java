@@ -8,6 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,42 +105,47 @@ public class URLDirectDownloader {
 
 		URL url = UrlUtils.toURL(urlString);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		try {
+			// 获取文件大小（部分服务器可能返回 -1）
+			long totalFileSize = connection.getContentLengthLong();
+			long downloadedSize = 0;
 
-		// 获取文件大小
-		long totalFileSize = connection.getContentLengthLong();
-		long downloadedSize = 0;
+			// 创建输出流以保存文件
+			String fileName = urlString.substring(urlString.lastIndexOf('/') + 1);
 
-		// 创建输出流以保存文件
-		String fileName = urlString.substring(urlString.lastIndexOf('/') + 1);
-		FileOutputStream fos = new FileOutputStream(new File(outputDir, fileName));
+			// 创建输入流以读取文件
+			try (InputStream is = connection.getInputStream();
+					FileOutputStream fos = new FileOutputStream(new File(outputDir, fileName))) {
 
-		// 创建输入流以读取文件
-		InputStream is = connection.getInputStream();
+				byte[] buffer = new byte[409600000];
+				int bytesRead;
 
-		byte[] buffer = new byte[409600000];
-		int bytesRead;
+				StringBuilder stringBuilder = new StringBuilder();
+				while ((bytesRead = is.read(buffer)) != -1) {
+					fos.write(buffer, 0, bytesRead);
+					downloadedSize += bytesRead;
 
-		StringBuilder stringBuilder = new StringBuilder();
-		while ((bytesRead = is.read(buffer)) != -1) {
-			fos.write(buffer, 0, bytesRead);
-			downloadedSize += bytesRead;
+					if (computationalModuleFace != null && instanceFrame != null) {
+						stringBuilder.setLength(0);
+						if (totalFileSize > 0) {
+							stringBuilder.append(downloadedSize).append(" / ").append(totalFileSize).append(" = ");
+							double percentage = (double) downloadedSize / (double) totalFileSize * 100.0;
+							stringBuilder.append((int) percentage).append(" %");
+						} else {
+							stringBuilder.append(downloadedSize).append(" / unknown");
+						}
 
-			if (computationalModuleFace != null && instanceFrame != null) {
-				stringBuilder.setLength(0);
-				stringBuilder.append(downloadedSize).append(" / ");
-				stringBuilder.append(totalFileSize).append(" = ");
-				double percentage = (double) downloadedSize / totalFileSize * 100;
-				stringBuilder.append((int) percentage);
-				stringBuilder.append(" %");
-				instanceFrame.onlyRefreshButtomStatesBar(computationalModuleFace, stringBuilder.toString(), 100);
+						String statusText = stringBuilder.toString();
+						SwingUtilities.invokeLater(
+								() -> instanceFrame.onlyRefreshButtomStatesBar(computationalModuleFace, statusText, 100));
+					}
+				}
 			}
+
+			return fileName;
+		} finally {
+			connection.disconnect();
 		}
-
-		fos.close();
-		is.close();
-		connection.disconnect();
-
-		return fileName;
 
 	}
 

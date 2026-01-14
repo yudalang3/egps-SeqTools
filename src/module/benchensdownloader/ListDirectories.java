@@ -29,22 +29,22 @@ public class ListDirectories {
 //            String dirURL = "https://ftp.ensembl.org/pub/release-112/fasta/";
 			String dirURL = "file:/C:\\Users\\yudal\\Documents\\BaiduSyncdisk\\博士后工作开展\\工作汇报\\基于富集分析的通路激活\\WntCompoentsCollections\\Readme.txt";
             URL url = UrlUtils.toURL(dirURL);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
-            // 正则表达式匹配文件夹链接
-            Pattern dirPattern = Pattern.compile("<td><a href=\"(.*?)/\">.*?</a></td>");
-            String line;
-            
-            // 读取每一行，寻找文件夹链接
-            while ((line = reader.readLine()) != null) {
-                Matcher matcher = dirPattern.matcher(line);
-                if (matcher.find()) {
-                    String dirName = matcher.group(1); // 获取文件夹名称
-					speciesName = dirName.replaceAll("_", " ");
-					String newUrl = dirURL + dirName + "/cdna/";
-					// 要得到 all.fa.gz的 文件
-					// <a href="Acanthochromis_polyacanthus.ASM210954v1.cdna.all.fa.gz">
-					String pathOfFastaGZ = null;
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+				// 正则表达式匹配文件夹链接
+				Pattern dirPattern = Pattern.compile("<td><a href=\"(.*?)/\">.*?</a></td>");
+				String line;
+
+				// 读取每一行，寻找文件夹链接
+				while ((line = reader.readLine()) != null) {
+					Matcher matcher = dirPattern.matcher(line);
+					if (matcher.find()) {
+						String dirName = matcher.group(1); // 获取文件夹名称
+						speciesName = dirName.replaceAll("_", " ");
+						String newUrl = dirURL + dirName + "/cdna/";
+						// 要得到 all.fa.gz的 文件
+						// <a href="Acanthochromis_polyacanthus.ASM210954v1.cdna.all.fa.gz">
+						String pathOfFastaGZ = null;
 
 						try {
 
@@ -58,11 +58,10 @@ public class ListDirectories {
 							sJoiner.add(newUrl + pathOfFastaGZ).add(speciesName).add(dirName);
 							outputList.add(sJoiner.toString());
 						}
-                }
+					}
 
+				}
 			}
-
-            reader.close();
 
 				FileUtils.writeLines(new File(
 						"C:\\Users\\yudal\\Documents\\BaiduSyncdisk\\博士后工作开展\\文献管理\\具体文献\\Wnt通路\\素材\\DB\\SpeciesColl\\Ensembl_taxon\\20240514\\species_cdna_download.txt"),
@@ -78,29 +77,27 @@ public class ListDirectories {
 
 	private static String extractPathOfFastaGZ(String urlPath) throws IOException {
 		URL url = UrlUtils.toURL(urlPath);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+			// 正则表达式匹配文件夹链接
+			Pattern dirPattern = Pattern.compile("<a href=\"(.*?)cdna\\.all\\.fa\\.gz\">");
+			String line;
 
-		// 正则表达式匹配文件夹链接
-		Pattern dirPattern = Pattern.compile("<a href=\"(.*?)cdna\\.all\\.fa\\.gz\">");
-		String line;
+			String ret = null;
 
-		String ret = null;
+			// 读取每一行，寻找文件夹链接
+			while ((line = reader.readLine()) != null) {
+				Matcher matcher = dirPattern.matcher(line);
+				if (matcher.find()) {
+					String dirName = matcher.group(1); // 获取文件夹名称
+					// 要得到 all.fa.gz的 文件
+					// <a href="Acanthochromis_polyacanthus.ASM210954v1.cdna.all.fa.gz">
+					ret = dirName.concat("cdna.all.fa.gz");
+					break;
+				}
 
-		// 读取每一行，寻找文件夹链接
-		while ((line = reader.readLine()) != null) {
-			Matcher matcher = dirPattern.matcher(line);
-			if (matcher.find()) {
-				String dirName = matcher.group(1); // 获取文件夹名称
-				// 要得到 all.fa.gz的 文件
-				// <a href="Acanthochromis_polyacanthus.ASM210954v1.cdna.all.fa.gz">
-				ret = dirName.concat("cdna.all.fa.gz");
-				break;
 			}
 
+			return ret;
 		}
-
-		reader.close();
-
-		return ret;
 	}
 }

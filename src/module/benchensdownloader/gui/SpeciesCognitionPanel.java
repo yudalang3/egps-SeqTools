@@ -53,35 +53,34 @@ public class SpeciesCognitionPanel extends DockableTabModuleFaceOfVoice {
 
 		// 要访问的URL
 		URL url = UrlUtils.toURL(inputURLPath);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
 
-		// 正则表达式匹配文件夹链接
-		Pattern dirPattern = Pattern.compile("<td><a href=\"(.*?)/\">(.*?)/</a></td>");
-		String line;
+			// 正则表达式匹配文件夹链接
+			Pattern dirPattern = Pattern.compile("<td><a href=\"(.*?)/\">(.*?)/</a></td>");
+			String line;
 
-		int count = 0;
-		// 读取每一行，寻找文件夹链接
-		while ((line = reader.readLine()) != null) {
-			Matcher matcher = dirPattern.matcher(line);
-			if (!matcher.find()) {
-				continue;
+			int count = 0;
+			// 读取每一行，寻找文件夹链接
+			while ((line = reader.readLine()) != null) {
+				Matcher matcher = dirPattern.matcher(line);
+				if (!matcher.find()) {
+					continue;
+				}
+
+				String dirName = matcher.group(1);
+				String speciesName = matcher.group(2);
+				if (dirName.isEmpty()) {
+					continue;
+				}
+				outputList.add(inputURLPath + dirName + "\t" + speciesName);
+				count++;
+
 			}
 
-			String dirName = matcher.group(1);
-			String speciesName = matcher.group(2);
-			if (dirName.isEmpty()) {
-				continue;
-			}
-			outputList.add(inputURLPath + dirName + "\t" + speciesName);
-			count++;
+			FileUtils.writeLines(new File(outputFilePath), outputList);
 
+			setText4Console(Arrays.asList("Found " + count + " counts."));
 		}
-
-		reader.close();
-
-		FileUtils.writeLines(new File(outputFilePath), outputList);
-
-		setText4Console(Arrays.asList("Found " + count + " counts."));
 	}
 
 	@Override

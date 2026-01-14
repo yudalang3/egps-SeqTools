@@ -141,26 +141,25 @@ public class UrlParserPanelOnlyOneLevel extends DockableTabModuleFaceOfVoice {
 	private String extractPathOfFastaGZ(String urlPath) throws IOException {
 
 		URL url = UrlUtils.toURL(urlPath);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
 
-		String ret = null;
+			String ret = null;
 
-		String line;
-		// 读取每一行，寻找文件夹链接
-		while ((line = reader.readLine()) != null) {
-			Matcher matcher = targetFileNamePattern.matcher(line);
-			if (matcher.find()) {
-				String dirName = matcher.group(1); // 获取文件夹名称
-				// 要得到 all.fa.gz的 文件
-				// <a href="Acanthochromis_polyacanthus.ASM210954v1.cdna.all.fa.gz">
-				ret = dirName;
-				break;
+			String line;
+			// 读取每一行，寻找文件夹链接
+			while ((line = reader.readLine()) != null) {
+				Matcher matcher = targetFileNamePattern.matcher(line);
+				if (matcher.find()) {
+					String dirName = matcher.group(1); // 获取文件夹名称
+					// 要得到 all.fa.gz的 文件
+					// <a href="Acanthochromis_polyacanthus.ASM210954v1.cdna.all.fa.gz">
+					ret = dirName;
+					break;
+				}
+
 			}
 
+			return ret;
 		}
-
-		reader.close();
-
-		return ret;
 	}
 }

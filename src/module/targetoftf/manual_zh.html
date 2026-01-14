@@ -2,11 +2,37 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title></title>
+<title>eGPS SeqTools - module/targetoftf</title>
 </head>
 <body>
 
 	<blockquote>
+
+<!-- egps-seqtools-manual: v1 -->
+<h1><font color="#2c3e50">module/targetoftf 使用说明</font></h1>
+<p><font color="#333333">本页面为该模块的帮助文档（面向 eGPS2 / SeqTools）。为保证在 Swing <b>JEditorPane</b> 中正确显示，内容采用兼容 <b>HTML 3.2</b> 的写法（以表格排版为主，样式尽量简洁）。</font></p>
+
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+<tr bgcolor="#2c3e50"><th colspan="2"><font color="white">模块信息</font></th></tr>
+<tr><td width="25%"><b>模块路径</b></td><td><font color="#333333">module/targetoftf</font></td></tr>
+<tr bgcolor="#ecf0f1"><td><b>文档语言</b></td><td><font color="#333333">中文（English: manual_en.html）</font></td></tr>
+</table>
+
+<hr>
+<h2><font color="#16a085">1. 快速开始（通用）</font></h2>
+<ol>
+  <li>在参数区查看必填项（若提供示例，可点击示例按钮切换）</li>
+  <li>输入/选择文件路径、列号、输出目录等参数</li>
+  <li>点击 <b>执行</b> 开始运行，在控制台/状态栏查看进度与日志</li>
+  <li>运行结束后，到输出目录检查结果文件</li>
+</ol>
+<hr>
+
+<h2><font color="#2c3e50">2. 模块概述</font></h2>
+<p><font color="#333333">下方为该模块的功能描述与使用说明（包含原始说明/外部链接等内容）。</font></p>
+<hr>
+
+
 		<h3>解决的问题</h3>
 		<p>理论从转录因子结合的DNA基序(motif)，预测转录因子的靶基因。</p>
 
@@ -20,6 +46,63 @@
       <li>用户输入所需参数。</li>
 			<li>点击执行按钮查看结果。</li>
 		</ol>
-	</blockquote>
+	
+<hr>
+<h2><font color="#2c3e50">3. 输入与输出（通用说明）</font></h2>
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+<tr bgcolor="#2c3e50">
+  <th><font color="white">项目</font></th>
+  <th><font color="white">说明</font></th>
+</tr>
+<tr>
+  <td width="25%"><b>输入</b></td>
+  <td><font color="#333333">通常为文本/表格/序列文件（如 FASTA/TSV/CSV/GFF3 等）或 URL/目录路径；以界面参数提示为准。</font></td>
+</tr>
+<tr bgcolor="#ecf0f1">
+  <td><b>输出</b></td>
+  <td><font color="#333333">通常为结果文件（TSV/FASTA/PNG/PDF 等）或控制台文本；建议优先指定一个空的输出目录，便于集中管理。</font></td>
+</tr>
+<tr>
+  <td><b>编码</b></td>
+  <td><font color="#333333">建议使用 UTF-8。若结果出现乱码，请检查输入文件编码与系统区域设置。</font></td>
+</tr>
+</table>
+
+<hr>
+<h2><font color="#8e44ad">4. 参数与运行提示</font></h2>
+<ul>
+  <li><b>路径含空格</b>：尽量把输出放在不含空格的目录；必要时使用引号（模块若支持）。</li>
+  <li><b>大文件</b>：建议先用小文件验证参数，再处理全量数据；必要时分批运行。</li>
+  <li><b>结果校验</b>：优先检查输出行数/序列条目数/关键字段是否符合预期。</li>
+</ul>
+
+<hr>
+<h2><font color="#e67e22">5. 常见问题（FAQ）</font></h2>
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+<tr bgcolor="#e67e22">
+  <th><font color="white">现象</font></th>
+  <th><font color="white">可能原因</font></th>
+  <th><font color="white">建议处理</font></th>
+</tr>
+<tr>
+  <td>运行无输出/很慢</td>
+  <td>输入文件过大、网络慢、参数不合理</td>
+  <td>先用小样本测试；检查输出目录是否可写；查看控制台/日志信息</td>
+</tr>
+<tr bgcolor="#fdf2e9">
+  <td>提示找不到文件</td>
+  <td>路径错误、权限不足、文件被占用</td>
+  <td>使用绝对路径；检查权限；关闭占用该文件的程序</td>
+</tr>
+<tr>
+  <td>结果为空</td>
+  <td>过滤条件过严、列号/分隔符设置错误</td>
+  <td>放宽过滤条件；确认输入格式；检查是否选择了正确列</td>
+</tr>
+</table>
+
+<p><font color="#666666">提示：如果本页面中包含外部链接（如 yuque 文档），可作为更详细的图文教程参考。</font></p>
+
+</blockquote>
 </body>
 </html>

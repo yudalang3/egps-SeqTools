@@ -2,11 +2,37 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title></title>
+<title>eGPS SeqTools - module/cds2prot</title>
 </head>
 <body>
 
 	<blockquote>
+
+<!-- egps-seqtools-manual: v1 -->
+<h1><font color="#2c3e50">module/cds2prot Manual</font></h1>
+<p><font color="#333333">This page is the module help document for eGPS2 / SeqTools. To ensure it renders correctly in Swing <b>JEditorPane</b>, it follows a <b>HTML 3.2</b>-compatible style (table-based layout, minimal styling).</font></p>
+
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+<tr bgcolor="#2c3e50"><th colspan="2"><font color="white">Module Info</font></th></tr>
+<tr><td width="25%"><b>Module Path</b></td><td><font color="#333333">module/cds2prot</font></td></tr>
+<tr bgcolor="#ecf0f1"><td><b>Language</b></td><td><font color="#333333">English (中文: manual_zh.html)</font></td></tr>
+</table>
+
+<hr>
+<h2><font color="#16a085">1. Quick Start (General)</font></h2>
+<ol>
+  <li>Check required parameters in the parameter area (switch examples if provided)</li>
+  <li>Fill parameters such as input file/URL, column index, output directory</li>
+  <li>Click <b>Execute</b> and watch progress in console/status bar</li>
+  <li>After completion, verify output files in the output directory</li>
+</ol>
+<hr>
+
+<h2><font color="#2c3e50">2. Overview</font></h2>
+<p><font color="#333333">The following section contains the module-specific description and usage notes (including any existing notes/external links).</font></p>
+<hr>
+
+
 		<h3>Task to resolve</h3>
 		<p> Input cds file in fasta format and output fasta file translated to protein. The rest remains unchanged. </p>
 		<p> you can view the url to obtain more information on modules:<br> https://www.yuque.com/u21499046/egpsdoc/nnuefyrribp08cxl </p>
@@ -20,6 +46,63 @@
 			<li>Click the Execute button to see the results.</li>
 		</ol>
 
-	</blockquote>
+	
+<hr>
+<h2><font color="#2c3e50">3. Inputs & Outputs (General)</font></h2>
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+<tr bgcolor="#2c3e50">
+  <th><font color="white">Item</font></th>
+  <th><font color="white">Description</font></th>
+</tr>
+<tr>
+  <td width="25%"><b>Inputs</b></td>
+  <td><font color="#333333">Typically text/table/sequence files (FASTA/TSV/CSV/GFF3, etc.) or URL/directory paths. Follow the GUI parameter hints.</font></td>
+</tr>
+<tr bgcolor="#ecf0f1">
+  <td><b>Outputs</b></td>
+  <td><font color="#333333">Typically result files (TSV/FASTA/PNG/PDF, etc.) or console text. Using a dedicated output directory is recommended.</font></td>
+</tr>
+<tr>
+  <td><b>Encoding</b></td>
+  <td><font color="#333333">UTF-8 is recommended. If you see garbled text, check file encoding and system locale.</font></td>
+</tr>
+</table>
+
+<hr>
+<h2><font color="#8e44ad">4. Parameter & Run Tips</font></h2>
+<ul>
+  <li><b>Paths with spaces</b>: prefer directories without spaces; quote paths if the module supports it.</li>
+  <li><b>Large files</b>: validate with a small sample first, then run the full dataset.</li>
+  <li><b>Result check</b>: verify row/entry counts and key fields to ensure the run is correct.</li>
+</ul>
+
+<hr>
+<h2><font color="#e67e22">5. FAQ</font></h2>
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+<tr bgcolor="#e67e22">
+  <th><font color="white">Symptom</font></th>
+  <th><font color="white">Possible Cause</font></th>
+  <th><font color="white">Suggestion</font></th>
+</tr>
+<tr>
+  <td>No output / very slow</td>
+  <td>Large input, slow network, wrong parameters</td>
+  <td>Try a small sample first; ensure output directory is writable; check logs</td>
+</tr>
+<tr bgcolor="#fdf2e9">
+  <td>File not found</td>
+  <td>Wrong path / permission / file locked</td>
+  <td>Use absolute paths; check permissions; close programs that hold the file</td>
+</tr>
+<tr>
+  <td>Empty results</td>
+  <td>Filters too strict / wrong column index / wrong delimiter</td>
+  <td>Relax filters; confirm input format; verify the selected column</td>
+</tr>
+</table>
+
+<p><font color="#666666">Tip: if this page contains external links (e.g., yuque docs), they may provide richer step-by-step tutorials.</font></p>
+
+</blockquote>
 </body>
 </html>
