@@ -21,6 +21,7 @@ import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
 import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 import egps2.frame.ComputationalModuleFace;
 
+@SuppressWarnings("serial")
 public class GenomeFastaSummarizer extends DockableTabModuleFaceOfVoice {
 
 	public GenomeFastaSummarizer(ComputationalModuleFace cmf) {

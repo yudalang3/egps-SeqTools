@@ -15,6 +15,7 @@ import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
 import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 import egps2.builtin.modules.voice.fastmodvoice.DockableTabModuleFaceOfVoice;
 
+@SuppressWarnings("serial")
 public class SummaryNodeStatesResultsPanel extends DockableTabModuleFaceOfVoice {
 
     public SummaryNodeStatesResultsPanel(ComputationalModuleFace cmf) {

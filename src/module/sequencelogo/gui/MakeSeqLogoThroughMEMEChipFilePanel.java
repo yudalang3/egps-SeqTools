@@ -50,6 +50,7 @@ import module.sequencelogo.makesequencelogo.MakeSequenceLogoParameter;
  * @author zjw
  * @date 2024-04-28 09:51:59
  */
+@SuppressWarnings("serial")
 public class MakeSeqLogoThroughMEMEChipFilePanel extends JPanel {
 	private static final Logger log = LoggerFactory.getLogger(MakeSeqLogoThroughMEMEChipFilePanel.class);
 

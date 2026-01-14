@@ -18,6 +18,7 @@ import module.localblast.gui.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("serial")
 public class SequenceFilteringPanel extends JPanel {
 	private static final Logger log = LoggerFactory.getLogger(SequenceFilteringPanel.class);
 
@@ -81,7 +82,8 @@ public class SequenceFilteringPanel extends JPanel {
 				try {
 					//final Process process = Runtime.getRuntime().exec("cmd.exe /c dir");
 					
-					final Process process = Runtime.getRuntime().exec(runProgrameCommand);
+					// final Process process = Runtime.getRuntime().exec(runProgrameCommand);
+					final Process process = new ProcessBuilder(Util.splitCommandTokens(runProgrameCommand)).start();
 					Util.printMessage(process.getInputStream(),false,textArea_normal,textArea_error);
 					Util.printMessage(process.getErrorStream(),true,textArea_normal,textArea_error);
 				    // value 0 is normal

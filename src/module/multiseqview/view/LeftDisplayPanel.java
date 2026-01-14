@@ -15,6 +15,7 @@ import egps2.panels.dialog.EGPSFontChooser;
 import egps2.utils.common.model.datatransfer.CallBackBehavior;
 import module.multiseqview.SequenceStructureViewController;
 
+@SuppressWarnings("serial")
 public class LeftDisplayPanel extends JPanel{
 	
 	private JSpinner transparentSpinner;

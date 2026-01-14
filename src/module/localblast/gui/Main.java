@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("serial")
 public class Main extends JFrame {
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
 

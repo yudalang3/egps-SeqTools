@@ -51,7 +51,7 @@ public class GTFIndexer {
 
         try (
                 BlockCompressedInputStream bcis = new BlockCompressedInputStream(bgzfGtfFile);
-                AsciiLineReader lineReader = new AsciiLineReader(bcis)
+                AsciiLineReader lineReader = AsciiLineReader.from(bcis)
         ) {
             LineIteratorImpl lineIterator = new LineIteratorImpl(lineReader);
             TabixIndexCreator creator = new TabixIndexCreator(TabixFormat.GFF); // GTF 用 GFF 格式

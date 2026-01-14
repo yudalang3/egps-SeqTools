@@ -24,6 +24,7 @@ import egps2.frame.ComputationalModuleFace;
 import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
 import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 
+@SuppressWarnings("serial")
 public class TwoTableComparatorPanel extends DockableTabModuleFaceOfVoice {
 
 	public TwoTableComparatorPanel(ComputationalModuleFace cmf) {

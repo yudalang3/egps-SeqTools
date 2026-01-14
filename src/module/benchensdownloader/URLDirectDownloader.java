@@ -16,6 +16,7 @@ import tsv.io.TSVReader;
 import egps2.UnifiedAccessPoint;
 import egps2.frame.ComputationalModuleFace;
 import egps2.frame.MyFrame;
+import module.benchensdownloader.util.UrlUtils;
 
 /**
  * 使用写一个新的模块Tab Name： URL List Downloader<br>
@@ -100,7 +101,7 @@ public class URLDirectDownloader {
 
 		///////////////////////////////////////////////////////////
 
-		URL url = new URL(urlString);
+		URL url = UrlUtils.toURL(urlString);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
 		// 获取文件大小

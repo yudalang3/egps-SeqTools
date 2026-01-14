@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import egps2.panels.dialog.SwingDialog;
 import module.localblast.gui.AbstractBasicPanel;
 import module.localblast.gui.LocalBlastMain;
+import module.localblast.gui.util.Util;
 import egps2.modulei.RunningTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +77,8 @@ public class DataBaseToolsPanel extends AbstractBasicPanel {
 		try {
 			// final Process process = Runtime.getRuntime().exec("cmd.exe /c dir");
 
-			final Process process = Runtime.getRuntime().exec(runProgrameCommand);
+			// final Process process = Runtime.getRuntime().exec(runProgrameCommand);
+			final Process process = new ProcessBuilder(Util.splitCommandTokens(runProgrameCommand)).start();
 			printMessage(process.getInputStream(), false);
 			printMessage(process.getErrorStream(), true);
 			// value 0 is normal

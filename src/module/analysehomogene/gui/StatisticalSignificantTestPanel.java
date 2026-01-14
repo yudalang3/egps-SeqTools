@@ -14,6 +14,7 @@ import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class StatisticalSignificantTestPanel extends DockableTabModuleFaceOfVoice {
 
     public StatisticalSignificantTestPanel(ComputationalModuleFace cmf) {

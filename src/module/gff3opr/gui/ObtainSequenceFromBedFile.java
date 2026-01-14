@@ -28,6 +28,7 @@ import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 import egps2.builtin.modules.voice.fastmodvoice.DockableTabModuleFaceOfVoice;
 import egps2.frame.ComputationalModuleFace;
 
+@SuppressWarnings("serial")
 public class ObtainSequenceFromBedFile extends DockableTabModuleFaceOfVoice {
 
 	private final StringCounter stringCounter = new StringCounter();

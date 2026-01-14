@@ -17,6 +17,7 @@ import module.localblast.gui.search.programe.SearchProgrameCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("serial")
 public class RemoteBlastPanel extends JPanel {
 	private static final Logger log = LoggerFactory.getLogger(RemoteBlastPanel.class);
 

@@ -14,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 
 import egps2.frame.gui.handler.EGPSTextTransferHandler;
 
+@SuppressWarnings("serial")
 public class BasicModePanel extends JPanel {
 	private JTextField txtFinField_db;
 	private JTextField txt_entry;

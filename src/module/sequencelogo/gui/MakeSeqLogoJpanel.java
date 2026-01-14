@@ -54,6 +54,7 @@ import module.sequencelogo.makesequencelogo.ReadJustSequencesFile;
  * @author zjw
  * @date 2024-04-28 10:13:22
  */
+@SuppressWarnings("serial")
 public class MakeSeqLogoJpanel extends JPanel {
 	private static final Logger log = LoggerFactory.getLogger(MakeSeqLogoJpanel.class);
 

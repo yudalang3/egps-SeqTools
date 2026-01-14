@@ -14,6 +14,8 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import module.benchensdownloader.util.UrlUtils;
+
 public class ListDirectories {
 	private static final Logger log = LoggerFactory.getLogger(ListDirectories.class);
 
@@ -26,7 +28,7 @@ public class ListDirectories {
             // 要访问的URL
 //            String dirURL = "https://ftp.ensembl.org/pub/release-112/fasta/";
 			String dirURL = "file:/C:\\Users\\yudal\\Documents\\BaiduSyncdisk\\博士后工作开展\\工作汇报\\基于富集分析的通路激活\\WntCompoentsCollections\\Readme.txt";
-            URL url = new URL(dirURL);
+            URL url = UrlUtils.toURL(dirURL);
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
             // 正则表达式匹配文件夹链接
@@ -75,7 +77,7 @@ public class ListDirectories {
 	    }
 
 	private static String extractPathOfFastaGZ(String urlPath) throws IOException {
-		URL url = new URL(urlPath);
+		URL url = UrlUtils.toURL(urlPath);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
 		// 正则表达式匹配文件夹链接

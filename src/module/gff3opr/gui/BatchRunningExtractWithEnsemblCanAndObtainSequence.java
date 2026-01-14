@@ -20,6 +20,7 @@ import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
 import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 import egps2.builtin.modules.voice.fastmodvoice.DockableTabModuleFaceOfVoice;
 
+@SuppressWarnings("serial")
 public class BatchRunningExtractWithEnsemblCanAndObtainSequence extends DockableTabModuleFaceOfVoice {
 
 	public BatchRunningExtractWithEnsemblCanAndObtainSequence(ComputationalModuleFace cmf) {

@@ -13,6 +13,7 @@ import module.parsimonytre.CLI;
 import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
 import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 
+@SuppressWarnings("serial")
 public class InferringInternalNodeStatesPanel extends DockableTabModuleFaceOfVoice {
 
     public InferringInternalNodeStatesPanel(ComputationalModuleFace cmf) {

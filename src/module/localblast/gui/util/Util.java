@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.JTextArea;
 
@@ -13,6 +16,18 @@ import org.slf4j.LoggerFactory;
 
 public class Util {
 	private static final Logger log = LoggerFactory.getLogger(Util.class);
+
+	public static List<String> splitCommandTokens(String command) {
+		List<String> tokens = new ArrayList<>();
+		if (command == null) {
+			return tokens;
+		}
+		StringTokenizer stringTokenizer = new StringTokenizer(command);
+		while (stringTokenizer.hasMoreTokens()) {
+			tokens.add(stringTokenizer.nextToken());
+		}
+		return tokens;
+	}
 
 	public static void printMessage(final InputStream input, boolean isError, JTextArea textArea_normal,
 			JTextArea textArea_error) {

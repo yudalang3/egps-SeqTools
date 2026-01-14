@@ -28,6 +28,7 @@ import module.bedmerger.calculate.BedFileManager;
 import module.bedmerger.calculate.BedRecord;
 import egps2.builtin.modules.largetextedi.MethodsForText2Editor;
 
+@SuppressWarnings("serial")
 public class SimpleLeftControlPanel extends JPanel {
 	private static final Logger log = LoggerFactory.getLogger(SimpleLeftControlPanel.class);
 	private static final long serialVersionUID = 6360716192941698962L;

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import egps2.frame.gui.comp.SimplestWorkBench;
 import egps2.EGPSProperties;
 
+@SuppressWarnings("serial")
 public class WorkBanch4presenter extends SimplestWorkBench {
 	
 	private GuiMain guiMain;

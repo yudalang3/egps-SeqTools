@@ -29,6 +29,7 @@ import org.apache.commons.lang3.tuple.Triple;
  * @author zjw
  * @date 2024-04-26 05:45:28
  */
+@SuppressWarnings("serial")
 public class MakeSequenceLogo extends JPanel {
 
 	private MakeSequenceLogoParameter parameter;

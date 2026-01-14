@@ -8,6 +8,7 @@ import egps2.utils.common.util.SaveUtil;
 import egps2.frame.ModuleFace;
 import egps2.modulei.IModuleLoader;
 
+@SuppressWarnings("serial")
 public class GuiMain extends ModuleFace {
 
 	private VoiceImporter voicm4General2dPlot;

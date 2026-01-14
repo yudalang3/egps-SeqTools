@@ -31,6 +31,7 @@ import egps2.frame.ComputationalModuleFace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("serial")
 public class ExtractUpstreamOfGeneByEnsemblCan extends DockableTabModuleFaceOfVoice {
 
 	private static final Logger log = LoggerFactory.getLogger(ExtractUpstreamOfGeneByEnsemblCan.class);

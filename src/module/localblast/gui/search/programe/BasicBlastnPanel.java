@@ -376,7 +376,8 @@ public class BasicBlastnPanel extends JPanel implements SearchProgrameCommon {
 		try {
 
 			long timeMillis = System.currentTimeMillis();
-			final Process process = Runtime.getRuntime().exec(runProgrameCommand);
+			// final Process process = Runtime.getRuntime().exec(runProgrameCommand);
+			final Process process = new ProcessBuilder(Util.splitCommandTokens(runProgrameCommand)).start();
 			Util.printMessage(process.getInputStream(), false, normal, error);
 			Util.printMessage(process.getErrorStream(), true, normal, error);
 			// value 0 is normal

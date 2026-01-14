@@ -19,6 +19,7 @@ import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
 import egps2.builtin.modules.voice.fastmodvoice.DockableTabModuleFaceOfVoice;
 import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 
+@SuppressWarnings("serial")
 public class CountRowEntriesPanel extends DockableTabModuleFaceOfVoice {
 
 	public CountRowEntriesPanel(ComputationalModuleFace cmf) {

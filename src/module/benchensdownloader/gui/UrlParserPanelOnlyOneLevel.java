@@ -22,6 +22,7 @@ import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
 import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import module.benchensdownloader.util.UrlUtils;
 
 @SuppressWarnings("serial")
 public class UrlParserPanelOnlyOneLevel extends DockableTabModuleFaceOfVoice {
@@ -139,7 +140,7 @@ public class UrlParserPanelOnlyOneLevel extends DockableTabModuleFaceOfVoice {
 
 	private String extractPathOfFastaGZ(String urlPath) throws IOException {
 
-		URL url = new URL(urlPath);
+		URL url = UrlUtils.toURL(urlPath);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
 		String ret = null;

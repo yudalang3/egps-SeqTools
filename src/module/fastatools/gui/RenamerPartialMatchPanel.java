@@ -20,6 +20,7 @@ import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
 import egps2.builtin.modules.voice.fastmodvoice.OrganizedParameterGetter;
 import egps2.frame.ComputationalModuleFace;
 
+@SuppressWarnings("serial")
 public class RenamerPartialMatchPanel extends DockableTabModuleFaceOfVoice {
 
 	public RenamerPartialMatchPanel(ComputationalModuleFace cmf) {

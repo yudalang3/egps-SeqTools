@@ -154,7 +154,8 @@ public class SoftwareDetectionPanel extends JPanel implements ActionListener {
 		new Thread(() -> {
 
 			try {
-				final Process process = Runtime.getRuntime().exec(runProgrameCommand);
+				// final Process process = Runtime.getRuntime().exec(runProgrameCommand);
+				final Process process = new ProcessBuilder(Util.splitCommandTokens(runProgrameCommand)).start();
 				Util.printMessage(process.getInputStream(), textArea_normal);
 				Util.printMessage(process.getErrorStream(), textArea_normal);
 				// value 0 is normal

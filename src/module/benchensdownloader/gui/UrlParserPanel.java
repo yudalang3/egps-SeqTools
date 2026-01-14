@@ -32,6 +32,7 @@ import tsv.io.KitTable;
 import tsv.io.TSVReader;
 import egps2.frame.ComputationalModuleFace;
 import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
+import module.benchensdownloader.util.UrlUtils;
 
 @SuppressWarnings("serial")
 public class UrlParserPanel extends DockableTabModuleFaceOfVoice {
@@ -146,7 +147,7 @@ public class UrlParserPanel extends DockableTabModuleFaceOfVoice {
 
 	private String extractPathOfFastaGZ(String urlPath) throws IOException {
 		
-		URL url = new URL(urlPath);
+		URL url = UrlUtils.toURL(urlPath);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
 

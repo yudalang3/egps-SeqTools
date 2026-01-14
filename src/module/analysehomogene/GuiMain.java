@@ -19,6 +19,7 @@ import egps2.builtin.modules.voice.fastmodvoice.DockableTabModuleFaceOfVoice;
 import egps2.modulei.IInformation;
 import egps2.modulei.IModuleLoader;
 
+@SuppressWarnings("serial")
 public class GuiMain extends ComputationalModuleFace {
 
 	List<DockableTabModuleFaceOfVoice> listOfSubTabModuleFace = Lists.newArrayList();

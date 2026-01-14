@@ -22,6 +22,7 @@ import com.google.common.base.Strings;
 
 import egps2.frame.ComputationalModuleFace;
 import egps2.builtin.modules.voice.bean.AbstractParamsAssignerAndParser4VOICE;
+import module.benchensdownloader.util.UrlUtils;
 
 @SuppressWarnings("serial")
 public class SpeciesCognitionPanel extends DockableTabModuleFaceOfVoice {
@@ -51,7 +52,7 @@ public class SpeciesCognitionPanel extends DockableTabModuleFaceOfVoice {
 		List<String> outputList = new LinkedList<>();
 
 		// 要访问的URL
-		URL url = new URL(inputURLPath);
+		URL url = UrlUtils.toURL(inputURLPath);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
 		// 正则表达式匹配文件夹链接
