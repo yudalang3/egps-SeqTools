@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,9 +50,9 @@ public class CLI {
 		try {
 			cmd = parser.parse(options, args);
 
-			String ori_scripts = cmd.getOptionValue("script");
+			String oriScripts = cmd.getOptionValue("script");
 			log.info("The original script is:");
-			log.info(ori_scripts);
+			log.info(oriScripts);
 			String parametersPath = cmd.getOptionValue("parametersFile");
 			Map<String, List<String>> asKey2ListMap = TSVReader.readAsKey2ListMap(parametersPath);
 			
@@ -61,7 +60,7 @@ public class CLI {
 			List<String> firstValues = newArrayList.get(0).getValue();
 			int size = firstValues.size();
 			for (int i = 0; i < size; i++) {
-				String scripts = ori_scripts;
+				String scripts = oriScripts;
 				for (Entry<String, List<String>> entry : newArrayList) {
 					String key = entry.getKey();
 					String myKey = "{" + key + "}";
@@ -72,7 +71,7 @@ public class CLI {
 				}
 				log.info("The script after substituted is:");
 				log.info(scripts);
-				runOnece(scripts);
+				runOnece(parseCommandLine(scripts));
 
 			}
 			
@@ -85,16 +84,12 @@ public class CLI {
 		}
 	}
 
-	private static void runOnece(String script) {
-
-		// 在 Windows 上，可以将命令更改为 "cmd.exe", "/c", "dir"
-		List<String> commands;
-		if (System.getProperty("os.name").toLowerCase().contains("win")) {
-			commands = Arrays.asList("cmd.exe", "/c", script);
-		} else {
-			commands = Arrays.asList("/bin/sh", "-c", script);
+	private static void runOnece(List<String> commands) {
+		if (commands == null || commands.isEmpty()) {
+			log.error("The command is empty.");
+			return;
 		}
-
+		log.info("The parsed command tokens are: {}", commands);
 		ProcessBuilder processBuilder = new ProcessBuilder(commands);
 		processBuilder.redirectErrorStream(true); // 合并标准输出和错误输出
 		try {
@@ -113,6 +108,63 @@ public class CLI {
 			System.exit(1);
 		}
 
+	}
+
+	private static List<String> parseCommandLine(String script) {
+		List<String> commands = new ArrayList<>();
+		if (script == null) {
+			return commands;
+		}
+
+		StringBuilder currentToken = new StringBuilder();
+		boolean inSingleQuote = false;
+		boolean inDoubleQuote = false;
+		boolean tokenStarted = false;
+
+		for (int i = 0; i < script.length(); i++) {
+			char currentChar = script.charAt(i);
+
+			if (currentChar == '\'' && !inDoubleQuote) {
+				inSingleQuote = !inSingleQuote;
+				tokenStarted = true;
+				continue;
+			}
+			if (currentChar == '"' && !inSingleQuote) {
+				inDoubleQuote = !inDoubleQuote;
+				tokenStarted = true;
+				continue;
+			}
+
+			if (currentChar == '\\' && i + 1 < script.length()) {
+				char nextChar = script.charAt(i + 1);
+				if (nextChar == '\\' || nextChar == '\'' || nextChar == '"') {
+					currentToken.append(nextChar);
+					tokenStarted = true;
+					i++;
+					continue;
+				}
+			}
+
+			if (Character.isWhitespace(currentChar) && !inSingleQuote && !inDoubleQuote) {
+				if (tokenStarted) {
+					commands.add(currentToken.toString());
+					currentToken.setLength(0);
+					tokenStarted = false;
+				}
+				continue;
+			}
+
+			currentToken.append(currentChar);
+			tokenStarted = true;
+		}
+
+		if (inSingleQuote || inDoubleQuote) {
+			throw new IllegalArgumentException("Unclosed quote in command: " + script);
+		}
+		if (tokenStarted) {
+			commands.add(currentToken.toString());
+		}
+		return commands;
 	}
 
 }
