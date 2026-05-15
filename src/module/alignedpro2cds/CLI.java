@@ -1,6 +1,7 @@
 package module.alignedpro2cds;
 
 import java.io.File;
+import java.io.IOException;
 
 import utils.EGPSUtil;
 import org.slf4j.Logger;
@@ -19,7 +20,12 @@ public class CLI {
 		}
 		String inputFilePath = args[0];
 
-		AlignedProt2AlignedCDS.makeTheConversion(new File(inputFilePath), new File(args[1]), new File(args[2]));
+		try {
+			AlignedProt2AlignedCDS.makeTheConversion(new File(inputFilePath), new File(args[1]), new File(args[2]));
+		} catch (IOException | IllegalArgumentException e) {
+			log.error(e.getMessage());
+			System.exit(1);
+		}
 
 		log.info("Successfully accomplished.");
 

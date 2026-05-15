@@ -51,9 +51,9 @@ public class IndependentModuleLoader extends TabModuleFaceOfVoice {
 	protected void setParameter(AbstractParamsAssignerAndParser4VOICE mapProducer) {
 
 		mapProducer.addKeyValueEntryBean("input.aligned.protein.path", "",
-				"The target coding sequence file for translation, Necessary.");
+				"The seq. ID is the string before white char.\n#The target coding sequence file for translation, Necessary.");
 		mapProducer.addKeyValueEntryBean("input.cds.path", "",
-				"The target coding sequence file for translation, Necessary.");
+				"The seq. ID is the string before white char.\nThe target coding sequence file for translation, Necessary.");
 		mapProducer.addKeyValueEntryBean("output.aligned.cds.path", "",
 				"Set the output path of the aligned CDS file, if null, the file path is *aligned.cds.fas");
 
@@ -67,7 +67,7 @@ public class IndependentModuleLoader extends TabModuleFaceOfVoice {
 
 		String string = o.getSimplifiedString("input.aligned.protein.path");
 		if (Strings.isNullOrEmpty(string)) {
-			throw new IllegalArgumentException("Plese input the $input.aligned.protein.path");
+			throw new IllegalArgumentException("Please input the $input.aligned.protein.path");
 		} else {
 			inputAlignedProt = string;
 		}
